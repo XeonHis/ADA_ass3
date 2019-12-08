@@ -4,15 +4,15 @@ package A3_2;
  * @author paulalan
  * @create 2019/11/30 14:44
  */
-public class Vertex
+public class Vertex<E>
 {
-	private char label;
+	private E label;
 	private boolean isVisited;
 
-	public Vertex(char label)
+	public Vertex(E label)
 	{
 		this.label = label;
-		isVisited = false;
+		this.isVisited = false;
 	}
 
 	public void setVisited(boolean visited)
@@ -20,7 +20,7 @@ public class Vertex
 		isVisited = visited;
 	}
 
-	public char getLabel()
+	public E getLabel()
 	{
 		return label;
 	}

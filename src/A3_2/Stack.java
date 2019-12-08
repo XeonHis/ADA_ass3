@@ -8,19 +8,17 @@ import java.util.Vector;
  */
 public class Stack
 {
-	private Vector size = new Vector();
-	private int[] stack;
+	private Vector<Integer> vector = new Vector<>();
 	private int top;
 
 	public Stack()
 	{
-		stack = new int[size.capacity()];
 		top = -1;
 	}
 
 	public void push(int j)
 	{
-		stack[++top] = j;
+		vector.add(++top, j);
 	}
 
 	public void pop()
@@ -30,7 +28,7 @@ public class Stack
 
 	public int peek()
 	{
-		return stack[top];
+		return vector.get(top);
 	}
 
 	public boolean isEmpty()
