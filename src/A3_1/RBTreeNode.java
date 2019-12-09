@@ -74,10 +74,8 @@ public class RBTreeNode
 	@Override
 	public String toString()
 	{
-		return "RBTreeNode{" +
-				"key=" + key +
-				", color=" + (color?"BLACK":"RED") +
-				'}';
+		return "RBTreeNode: " + "key=" + key +
+				", color=" + (color?"BLACK":"RED") + '}';
 	}
 }
 

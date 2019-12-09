@@ -8,6 +8,17 @@ public class Vertex<E>
 {
 	private E label;
 	private boolean isVisited;
+	private Vertex areParent;
+
+	public Vertex getAreParent()
+	{
+		return areParent;
+	}
+
+	public void setAreParent(Vertex areParent)
+	{
+		this.areParent = areParent;
+	}
 
 	public Vertex(E label)
 	{

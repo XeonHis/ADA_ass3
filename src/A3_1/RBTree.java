@@ -6,12 +6,30 @@ package A3_1;
  */
 public class RBTree
 {
+	/**
+	 * tree node
+	 */
 	private RBTreeNode root;
+	/**
+	 * color: red
+	 */
 	private final boolean RED = false;
+	/**
+	 * color: black
+	 */
 	private final boolean BLACK = true;
+	/**
+	 * initial minimum number
+	 */
 	private int minimum = Integer.MAX_VALUE;
 
-	public RBTreeNode query(int key)
+
+	/**
+	 * find whether the node is in the tree
+	 * @param key number of node
+	 * @return node
+	 */
+	public RBTreeNode contains(int key)
 	{
 		RBTreeNode tmp = root;
 		while (tmp != null)
@@ -26,7 +44,11 @@ public class RBTree
 		return null;
 	}
 
-	public void insert(int key)
+	/**
+	 * add new tree node, initial color: black
+	 * @param key current node's number
+	 */
+	public void add(int key)
 	{
 		RBTreeNode node = new RBTreeNode(key);
 		if (root == null)
@@ -36,7 +58,8 @@ public class RBTree
 			return;
 		}
 		RBTreeNode parent = root;
-		RBTreeNode son = null;
+		RBTreeNode son;
+		//determine the position
 		if (key <= parent.getKey())
 		{
 			son = parent.getLeft();
@@ -65,19 +88,24 @@ public class RBTree
 		}
 		node.setParent(parent);
 
-		//fix up
 		insertFix(node);
 	}
 
+	/**
+	 * fix balance
+	 * @param node current node
+	 */
 	private void insertFix(RBTreeNode node)
 	{
-		RBTreeNode father, grandFather;
+		RBTreeNode father;
+		RBTreeNode grandFather;
+		//determine the condition
 		while ((father = node.getParent()) != null && father.getColor() == RED)
 		{
 			grandFather = father.getParent();
 			if (grandFather.getLeft() == father)
 			{
-				//F is left child of G
+				//left child
 				RBTreeNode uncle = grandFather.getRight();
 				if (uncle != null && uncle.getColor() == RED)
 				{
@@ -99,7 +127,7 @@ public class RBTree
 				rightRotate(grandFather);
 			} else
 			{
-				//F is right child of G
+				//right child
 				RBTreeNode uncle = grandFather.getLeft();
 				if (uncle != null && uncle.getColor() == RED)
 				{
@@ -124,149 +152,25 @@ public class RBTree
 		setBlack(root);
 	}
 
-	public void delete(int key)
-	{
-		delete(query(key));
-	}
 
-	private void delete(RBTreeNode node)
-	{
-		if (node == null)
-			return;
-		if (node.getLeft() != null && node.getRight() != null)
-		{
-			RBTreeNode replaceNode = node;
-			RBTreeNode tmp = node.getRight();
-			while (tmp != null)
-			{
-				replaceNode = tmp;
-				tmp = tmp.getLeft();
-			}
-			int t = replaceNode.getKey();
-			replaceNode.setKey(node.getKey());
-			node.setKey(t);
-			delete(replaceNode);
-			return;
-		}
-		RBTreeNode replaceNode = null;
-		if (node.getLeft() != null)
-			replaceNode = node.getLeft();
-		else
-			replaceNode = node.getRight();
-
-		RBTreeNode parent = node.getParent();
-		if (parent == null)
-		{
-			root = replaceNode;
-			if (replaceNode != null)
-				replaceNode.setParent(null);
-		} else
-		{
-			if (replaceNode != null)
-				replaceNode.setParent(parent);
-			if (parent.getLeft() == node)
-				parent.setLeft(replaceNode);
-			else
-			{
-				parent.setRight(replaceNode);
-			}
-		}
-		if (node.getColor() == BLACK)
-			removeFix(parent, replaceNode);
-
-	}
-
-
-	private void removeFix(RBTreeNode father, RBTreeNode node)
-	{
-		while ((node == null || node.getColor() == BLACK) && node != root)
-		{
-			if (father.getLeft() == node)
-			{
-				//S is left child of P
-				RBTreeNode brother = father.getRight();
-				if (brother != null && brother.getColor() == RED)
-				{
-					setRed(father);
-					setBlack(brother);
-					leftRotate(father);
-					brother = father.getRight();
-				}
-				if (brother == null || (isBlack(brother.getLeft()) && isBlack(brother.getRight())))
-				{
-					setRed(brother);
-					node = father;
-					father = node.getParent();
-					continue;
-				}
-				if (isRed(brother.getLeft()))
-				{
-					setBlack(brother.getLeft());
-					setRed(brother);
-					rightRotate(brother);
-					brother = brother.getParent();
-				}
-
-				brother.setColor(father.getColor());
-				setBlack(father);
-				setBlack(brother.getRight());
-				leftRotate(father);
-				node = root;
-			} else
-			{
-				//S is right child of P
-				RBTreeNode brother = father.getLeft();
-				if (brother != null && brother.getColor() == RED)
-				{
-					setRed(father);
-					setBlack(brother);
-					rightRotate(father);
-					brother = father.getLeft();
-				}
-				if (brother == null || (isBlack(brother.getLeft()) && isBlack(brother.getRight())))
-				{
-					setRed(brother);
-					node = father;
-					father = node.getParent();
-					continue;
-				}
-				if (isRed(brother.getRight()))
-				{
-					setBlack(brother.getRight());
-					setRed(brother);
-					leftRotate(brother);
-					brother = brother.getParent();
-				}
-
-				brother.setColor(father.getColor());
-				setBlack(father);
-				setBlack(brother.getLeft());
-				rightRotate(father);
-				node = root;
-			}
-		}
-
-		if (node != null)
-			node.setColor(BLACK);
-	}
-
-	private boolean isBlack(RBTreeNode node)
-	{
-		if (node == null)
-			return true;
-		return node.getColor() == BLACK;
-	}
-
-	private boolean isRed(RBTreeNode node)
-	{
-		if (node == null)
-			return false;
-		return node.getColor() == RED;
-	}
-
+	/**
+	 * do left rotation to keep balance
+	 * @param node root node of unbalance tree
+	 */
 	private void leftRotate(RBTreeNode node)
 	{
 		RBTreeNode right = node.getRight();
+		parentOperation(node, right);
+		node.setRight(right.getLeft());
+		if (right.getLeft() != null)
+		{
+			right.getLeft().setParent(node);
+		}
+		right.setLeft(node);
+	}
+
+	private void parentOperation(RBTreeNode node, RBTreeNode right)
+	{
 		RBTreeNode parent = node.getParent();
 		if (parent == null)
 		{
@@ -284,34 +188,16 @@ public class RBTree
 			right.setParent(parent);
 		}
 		node.setParent(right);
-		node.setRight(right.getLeft());
-		if (right.getLeft() != null)
-		{
-			right.getLeft().setParent(node);
-		}
-		right.setLeft(node);
 	}
 
+	/**
+	 * do right rotation to keep balance
+	 * @param node root node of unbalance tree
+	 */
 	private void rightRotate(RBTreeNode node)
 	{
 		RBTreeNode left = node.getLeft();
-		RBTreeNode parent = node.getParent();
-		if (parent == null)
-		{
-			root = left;
-			left.setParent(null);
-		} else
-		{
-			if (parent.getLeft() != null && parent.getLeft() == node)
-			{
-				parent.setLeft(left);
-			} else
-			{
-				parent.setRight(left);
-			}
-			left.setParent(parent);
-		}
-		node.setParent(left);
+		parentOperation(node, left);
 		node.setLeft(left.getRight());
 		if (left.getRight() != null)
 		{
@@ -335,6 +221,10 @@ public class RBTree
 		inOrder(root);
 	}
 
+	/**
+	 * In-order traversal
+	 * @param node current node
+	 */
 	private void inOrder(RBTreeNode node)
 	{
 		if (node == null)
@@ -344,7 +234,15 @@ public class RBTree
 		inOrder(node.getRight());
 	}
 
+	/**
+	 * find the minimum number between two closest number
+	 */
 	public void miniGap()
+	{
+		leftOperation(root);
+	}
+
+	private void leftOperation(RBTreeNode root)
 	{
 		if (root.getLeft() != null)
 		{
@@ -352,7 +250,7 @@ public class RBTree
 			if (pMinusL < minimum)
 			{
 				minimum = pMinusL;
-				System.out.println("MiniGap " + root.getKey() + " - " + root.getLeft().getKey() + " = " + pMinusL);
+//				System.out.println("MiniGap " + root.getKey() + " - " + root.getLeft().getKey() + " = " + pMinusL);
 			}
 			miniGap(root.getLeft());
 		}
@@ -362,33 +260,15 @@ public class RBTree
 			if (pMinusR < minimum)
 			{
 				minimum = pMinusR;
-				System.out.println("MiniGap " + root.getRight().getKey() + " - " + root.getKey() + " = " + pMinusR);
+//				System.out.println("MiniGap " + root.getRight().getKey() + " - " + root.getKey() + " = " + pMinusR);
 			}
 			miniGap(root.getRight());
 		}
 	}
+
 	public void miniGap(RBTreeNode node)
 	{
-		if (node.getLeft() != null)
-		{
-			int pMinusL = node.getKey() - node.getLeft().getKey();
-			if (pMinusL < minimum)
-			{
-				minimum = pMinusL;
-				System.out.println("MiniGap " + node.getKey() + " - " + node.getLeft().getKey() + " = " + pMinusL);
-			}
-			miniGap(node.getLeft());
-		}
-		if (node.getRight() != null)
-		{
-			int pMinusR = node.getRight().getKey() - node.getKey();
-			if (pMinusR < minimum)
-			{
-				minimum = pMinusR;
-				System.out.println("MiniGap " + node.getRight().getKey() + " - " + node.getKey() + " = " + pMinusR);
-			}
-			miniGap(node.getRight());
-		}
+		leftOperation(node);
 	}
 
 	public int getMinimum()

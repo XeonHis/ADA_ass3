@@ -1,6 +1,7 @@
 package A3_2;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author paulalan
@@ -43,9 +44,15 @@ public class test
 		graphADT.addEdge(11,12);//LM
 
 
-		ArrayList<Integer> dfslist = graphADT.DFS();
+		ArrayList<Integer> dfslist = graphADT.calculateDepths('A');
+		System.out.println("d(v) as follow:");
+		Util.formatOutput(dfslist);
 		ArrayList<Integer> miniList = graphADT.miniVCalculate();
-		graphADT.analyzeGraph(dfslist,miniList);
-
+		System.out.println("\n----------------------------------------\nm(v) as follow:");
+		Util.formatOutput(miniList);
+		graphADT.checkConnection();
+		graphADT.analyzeGraph('A');
+		System.out.println("\nArticulation point number is "+graphADT.getaPoint().size());
+		System.out.println("Bridge number is "+graphADT.getBridgeCount());
 	}
 }

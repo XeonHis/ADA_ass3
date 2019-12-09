@@ -1,5 +1,6 @@
 package A3_2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -8,6 +9,7 @@ import java.util.HashMap;
  */
 public class Util
 {
+	static char[] outputSequences;
 	static Vertex getKey(HashMap<Vertex, Integer> map, int value)
 	{
 		Vertex key = null;
@@ -20,4 +22,23 @@ public class Util
 		}
 		return key;
 	}
+	/**
+	 * format output
+	 *
+	 * @param temp input arraylist
+	 */
+	static void formatOutput(ArrayList<Integer> temp)
+	{
+
+		for (int i = 0; i < temp.size(); i++)
+		{
+			System.out.printf("%4s", outputSequences[i]);
+		}
+		System.out.println();
+		for (int i = 0; i < temp.size(); i++)
+		{
+			System.out.printf("%4s", temp.get(i));
+		}
+	}
+
 }

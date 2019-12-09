@@ -1,6 +1,5 @@
 package A3_1;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -20,13 +19,13 @@ public class testRBTree
 		{
 			testArray[i]=Integer.parseInt(inputArray[i]);
 		}
-//		int[] testArray = {10, 20, 18, 5, 8};
 		for (int value : testArray)
 		{
-			rbTree.insert(value);
+			rbTree.add(value);
 		}
 		rbTree.inOrder();
 		rbTree.miniGap();
-		System.out.println(rbTree.getMinimum());
+		System.out.println("The minimum gap is "+rbTree.getMinimum());
 	}
+
 }
